@@ -41,6 +41,10 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-reactive-panache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+        </dependency>
 
         <!-- Reactive SQL client for PostgreSQL -->
         <dependency>
@@ -58,11 +62,6 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -149,7 +148,7 @@
                 <executions>
                     <execution>
                         <id>startdb</id>
-                        <phase>process-resources</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>execute</goal>
                         </goals>
@@ -179,7 +178,7 @@
                 <version>${version.flyway}</version>
                 <executions>
                     <execution>
-                        <phase>process-resources</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>migrate</goal>
                         </goals>
