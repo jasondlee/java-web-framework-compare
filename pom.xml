@@ -8,18 +8,18 @@
     <name>java-web-framework-compare-parent</name>
 
     <properties>
-        <flyway.user>steeplesoft</flyway.user>
-        <flyway.password>steeplesoft</flyway.password>
+        <flyway.user>jwfc</flyway.user>
+        <flyway.password>jwfc</flyway.password>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <version.build-helper>3.2.0</version.build-helper>
-        <version.compiler-plugin>3.8.1</version.compiler-plugin>
+        <version.compiler-plugin>3.10.1</version.compiler-plugin>
         <version.flyway>9.0.0</version.flyway>
         <version.junit-jupiter>5.8.2</version.junit-jupiter>
-        <version.pgsql-jdbc>42.3.3</version.pgsql-jdbc>
+        <version.pgsql-jdbc>42.5.0</version.pgsql-jdbc>
         <version.quarkus>2.13.2.Final</version.quarkus>
         <version.rest-assured>5.0.1</version.rest-assured>
         <version.testcontainers>1.17.1</version.testcontainers>
