@@ -26,8 +26,14 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc</artifactId>
+            <artifactId>quarkus-hibernate-reactive-panache</artifactId>
         </dependency>
+        <!-- Hibernate Reactive uses the reactive-pg-client with PostgreSQL under the hood -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-reactive-pg-client</artifactId>
+        </dependency>
+        <!-- We are using RESTEasy Reactive in this quickstart -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-reactive</artifactId>
@@ -36,36 +42,20 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
         </dependency>
-        <!-- Hibernate Reactive dependency -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-reactive-panache</artifactId>
-        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-postgresql</artifactId>
-        </dependency>
-
-        <!-- Reactive SQL client for PostgreSQL -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-reactive-pg-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-flyway</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.0.0</version>
         </dependency>
     </dependencies>
 
@@ -74,7 +64,7 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <parameters>${maven.compiler.parameters}</parameters>
+                    <parameters>true</parameters>
                     <annotationProcessorPaths>
                         <!-- Your existing annotation processor(s)... -->
                         <path>
@@ -134,69 +124,85 @@
                             <resources>
                                 <resource>
                                     <directory>${project.basedir}/../database</directory>
-                                    <targetPath>${project.build.outputDirectory}/db/migration</targetPath>
+                                    <targetPath>${project.build.outputDirectory}/db/migrations</targetPath>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>groovy-maven-plugin</artifactId>
-                <version>2.1.1</version>
-                <executions>
-                    <execution>
-                        <id>startdb</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <source>
-                                db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
-                                        .withUsername("${flyway.user}")
-                                        .withDatabaseName("${flyway.user}")
-                                        .withPassword("${flyway.password}")
-                                db.start()
-                                project.properties.setProperty('flyway.url', db.getJdbcUrl())
-                            </source>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.testcontainers</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${version.testcontainers}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>${version.flyway}</version>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>migrate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${version.pgsql-jdbc}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <locations>
-                        <location>filesystem:${project.build.outputDirectory}/db/migration</location>
-                    </locations>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>run-tests</id>
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <version>2.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>startdb</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <source>
+                                        db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
+                                                .withUsername("${flyway.user}")
+                                                .withDatabaseName("${flyway.user}")
+                                                .withPassword("${flyway.password}")
+                                        db.start()
+                                        project.properties.setProperty('flyway.url', db.getJdbcUrl())
+                                    </source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.testcontainers</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${version.testcontainers}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <version>${version.flyway}</version>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>migrate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${version.pgsql-jdbc}</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <locations>
+                                <location>filesystem:${project.build.outputDirectory}/db/migrations</location>
+                            </locations>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
