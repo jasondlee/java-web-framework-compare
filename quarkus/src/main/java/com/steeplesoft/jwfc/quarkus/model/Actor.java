@@ -1,25 +1,21 @@
 package com.steeplesoft.jwfc.quarkus.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Actor extends PanacheEntityBase {
+public class Actor extends BaseModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "actor_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name="actor_seq", sequenceName = "actor_actor_id_seq")
     @Column(name = "actor_id")
-    public Long actorId;
+    public Long id;
     @Column(name = "first_name")
     public String firstName;
     @Column(name = "last_name")
     public String lastName;
-    @Column(name = "last_update")
-    public LocalDateTime lastUpdate;
-
 }
