@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.steeplesoft</groupId>
     <artifactId>java-web-framework-compare-parent</artifactId>
@@ -8,8 +7,8 @@
     <name>java-web-framework-compare-parent</name>
 
     <properties>
-        <flyway.user>jwfc</flyway.user>
-        <flyway.password>jwfc</flyway.password>
+        <flyway.user>demo</flyway.user>
+        <flyway.password>demo</flyway.password>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
