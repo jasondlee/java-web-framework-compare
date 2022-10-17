@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+@Entity
 @Table(name = "actor")
 public class Actor extends BaseModel {
     @Id

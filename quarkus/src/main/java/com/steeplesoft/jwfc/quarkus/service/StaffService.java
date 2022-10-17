@@ -15,19 +15,19 @@ import io.quarkus.panache.common.Sort;
 @ApplicationScoped
 public class StaffService {
     @Inject
-    protected StaffRepository staffRepository;
+    protected StaffRepository repository;
 
     public List<Staff> findAll() {
-        return staffRepository.listAll(Sort.by("lastName"));
+        return repository.listAll(Sort.by("lastName"));
     }
 
     public Staff find(Long id) {
-        return staffRepository.findById(id);
+        return repository.findById(id);
     }
 
     @Transactional
     public void create(Staff staff) {
-        staffRepository.persist(staff);
+        repository.persist(staff);
     }
 
     @Transactional
@@ -49,6 +49,6 @@ public class StaffService {
 
     @Transactional
     public void delete(Long id) {
-        staffRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }
