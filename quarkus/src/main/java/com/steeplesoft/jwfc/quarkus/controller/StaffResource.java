@@ -20,50 +20,49 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.steeplesoft.jwfc.quarkus.model.Actor;
-import com.steeplesoft.jwfc.quarkus.service.ActorService;
+import com.steeplesoft.jwfc.quarkus.model.Staff;
+import com.steeplesoft.jwfc.quarkus.service.StaffService;
 
-@Path("actors")
+@Path("/staff")
 @ApplicationScoped
 @Produces("application/json")
 @Consumes("application/json")
-public class ActorsResource {
-
+public class StaffResource {
     @Inject
-    private ActorService actorService;
+    protected StaffService staffService;
 
     @GET
-    public List<Actor> getActors() {
-        return actorService.findAll();
+    public List<Staff> getStaff() {
+        return staffService.findAll();
     }
 
-    @GET
     @Path("{id}")
-    public Response getActor(@PathParam("id") @NotNull Long id) {
-        return buildResponse(actorService.find(id));
+    @GET
+    public Response getStaff(@PathParam("id") Long id) {
+        return buildResponse(staffService.find(id));
     }
 
     @POST
-    public Response create(Actor actor) {
-        actorService.create(actor);
-        return Response.created(URI.create("/actors/" + actor.getId())).build();
+    public Response create(Staff staff) {
+        staffService.create(staff);
+        return Response.created(URI.create("/staff/" + staff.getId())).build();
     }
 
     @PUT
     @Path("{id}")
-    public Response update(Actor actor, @PathParam("id") @NotNull Long id) {
-        if (actor == null || actor.getId() == null || !Objects.equals(actor.getId(), id)) {
-            throw new BadRequestException("Missing/invalid actor");
+    public Response update(Staff staff, @PathParam("id") @NotNull Long id) {
+        if (staff == null || staff.getId() == null || !Objects.equals(staff.getId(), id)) {
+            throw new BadRequestException("Missing/invalid staff");
         }
 
-        actorService.update(actor);
+        staffService.update(staff);
         return Response.noContent().build();
     }
 
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") @NotNull Long id) {
-        actorService.delete(id);
+        staffService.delete(id);
         return Response.ok().build();
     }
 }

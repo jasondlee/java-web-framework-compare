@@ -2,9 +2,9 @@ package com.steeplesoft.jwfc.quarkus.repository;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import com.steeplesoft.jwfc.quarkus.model.Actor;
+import com.steeplesoft.jwfc.quarkus.model.Staff;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 @ApplicationScoped
-public class ActorRepository implements PanacheRepository<Actor> {
+public class StaffRepository implements PanacheRepository<Staff> {
 }

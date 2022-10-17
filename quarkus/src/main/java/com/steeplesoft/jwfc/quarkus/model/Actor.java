@@ -10,12 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-@Entity
 @Table(name = "actor")
 public class Actor extends BaseModel {
     @Id
-    @SequenceGenerator(name = "d", sequenceName = "actor_actor_id_seq", allocationSize=1)
-    @GeneratedValue(generator = "d", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "actor_seq", sequenceName = "actor_actor_id_seq", allocationSize=1)
+    @GeneratedValue(generator = "actor_seq")
     @Column(name = "actor_id")
     private Long id;
     @Column(name = "first_name")

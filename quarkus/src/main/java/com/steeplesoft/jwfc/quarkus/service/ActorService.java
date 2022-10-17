@@ -15,26 +15,26 @@ public class ActorService {
     @Inject
     ActorRepository repository;
 
-    public List<Actor> findActors() {
+    public List<Actor> findAll() {
         return repository.listAll();
     }
 
-    public Actor getActor(Long id) {
+    public Actor find(Long id) {
         return repository.findById(id);
     }
 
     @Transactional
-    public void createActor(Actor actor) {
+    public void create(Actor actor) {
         repository.persist(actor);
     }
 
     @Transactional
     public void update(Actor actor) {
-        Actor entity = getActor(actor.getId());
+        Actor entity = find(actor.getId());
 
         if (entity != null) {
-            entity.setFirstName(actor.getFirstName());
-            entity.setLastName(actor.getLastName());
+            entity.setFirstName(actor.getFirstName())
+                    .setLastName(actor.getLastName());
         } else {
             throw new NotFoundException();
         }
