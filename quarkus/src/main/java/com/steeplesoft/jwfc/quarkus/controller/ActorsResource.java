@@ -41,13 +41,13 @@ public class ActorsResource {
     @POST
     public Response create(Actor actor) {
         actorService.createActor(actor);
-        return Response.created(URI.create("/actors/" + actor.id)).build();
+        return Response.created(URI.create("/actors/" + actor.getId())).build();
     }
 
     @PUT
     @Path("{id}")
     public Response update(Actor actor) {
-        if (actor == null || actor.id == null) {
+        if (actor == null || actor.getId() == null) {
             throw new WebApplicationException("Actor ID was not set on request.", 422);
         }
 
