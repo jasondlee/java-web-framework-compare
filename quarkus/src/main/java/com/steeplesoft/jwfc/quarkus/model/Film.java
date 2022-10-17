@@ -66,6 +66,13 @@ public class Film extends BaseModel {
     )
     private List<Actor> actors;
 
+    @OneToMany
+    @JoinTable(name = "film_category",
+            joinColumns = @JoinColumn(name = "film_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
+
     public Long getId() {
         return id;
     }
@@ -165,17 +172,37 @@ public class Film extends BaseModel {
         return this;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public Film setCategories(List<Category> categories) {
+        this.categories = categories;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Film film = (Film) o;
-        return Objects.equals(id, film.id) && Objects.equals(title, film.title) && Objects.equals(description, film.description) && Objects.equals(releaseYear, film.releaseYear) && Objects.equals(rentalRate, film.rentalRate) && Objects.equals(length, film.length) && Objects.equals(replacementCost, film.replacementCost) && rating == film.rating && Objects.equals(specialFeatures, film.specialFeatures) && Objects.equals(fullText, film.fullText) && Objects.equals(actors, film.actors);
+        return Objects.equals(id, film.id) &&
+                Objects.equals(title, film.title) &&
+                Objects.equals(description, film.description) &&
+                Objects.equals(releaseYear, film.releaseYear) &&
+                Objects.equals(rentalRate, film.rentalRate) &&
+                Objects.equals(length, film.length) &&
+                Objects.equals(replacementCost, film.replacementCost) &&
+                rating == film.rating && Objects.equals(specialFeatures, film.specialFeatures) &&
+                Objects.equals(fullText, film.fullText) &&
+                Objects.equals(actors, film.actors) &&
+                Objects.equals(categories, film.categories);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, releaseYear, rentalRate, length, replacementCost, rating, specialFeatures, fullText, actors);
+        return Objects.hash(id, title, description, releaseYear, rentalRate, length, replacementCost, rating,
+                specialFeatures, fullText, actors, categories);
     }
 
     @Override
@@ -192,6 +219,7 @@ public class Film extends BaseModel {
                 ", specialFeatures=" + specialFeatures +
                 ", fullText='" + fullText + '\'' +
                 ", actors=" + actors +
+                ", categories=" + categories +
                 ", lastUpdate=" + lastUpdate +
                 '}';
     }
