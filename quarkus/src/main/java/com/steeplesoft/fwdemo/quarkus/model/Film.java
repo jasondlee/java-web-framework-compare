@@ -44,9 +44,9 @@ public class Film extends BaseModel {
     private Long id;
     private String title;
     private String description;
-//    @Type(type = "year")
+    @Type(type = "year")
     @Column(name = "release_year")
-    private Integer releaseYear;
+    private Year releaseYear;
     @Column(name = "rental_rate")
     private Double rentalRate;
     private Integer length;
@@ -100,11 +100,11 @@ public class Film extends BaseModel {
         return this;
     }
 
-    public Integer getReleaseYear() {
+    public Year getReleaseYear() {
         return releaseYear;
     }
 
-    public Film setReleaseYear(Integer releaseYear) {
+    public Film setReleaseYear(Year releaseYear) {
         this.releaseYear = releaseYear;
         return this;
     }
