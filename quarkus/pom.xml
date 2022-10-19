@@ -122,31 +122,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${version.surefire-plugin}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/*TestCase</include>
-                            </includes>
-                            <systemPropertyVariables>
-                                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <maven.home>${maven.home}</maven.home>
-                                <db.user>${flyway.user}</db.user>
-                                <db.password>${flyway.password}</db.password>
-                                <db.url>${flyway.url}</db.url>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.surefire-plugin}</version>
                 <configuration>
@@ -155,7 +130,7 @@
                     </excludes>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-<!--                        <quarkus.log.level>DEBUG</quarkus.log.level>-->
+                        <!--                        <quarkus.log.level>DEBUG</quarkus.log.level>-->
                         <maven.home>${maven.home}</maven.home>
                         <db.user>${flyway.user}</db.user>
                         <db.password>${flyway.password}</db.password>
@@ -163,74 +138,93 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>groovy-maven-plugin</artifactId>
-                <version>2.1.1</version>
-                <executions>
-                    <execution>
-                        <id>startdb</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <source>db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
-                                    .withUsername("${flyway.user}")
-                                    .withDatabaseName("${flyway.user}")
-                                    .withPassword("${flyway.password}")
-                            db.start()
-                            project.properties.setProperty('flyway.url', db.getJdbcUrl())</source>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.testcontainers</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${version.testcontainers}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>${version.flyway}</version>
-                <executions>
-                    <execution>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>migrate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${version.pgsql-jdbc}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <locations>
-                        <location>filesystem:${project.build.outputDirectory}/db/migration</location>
-                    </locations>
-                </configuration>
-            </plugin>
 
         </plugins>
     </build>
     <profiles>
         <profile>
-            <id>flyway</id>
-            <activation>
-                <property>
-                    <name>!skipTests</name>
-<!--                    <value>false</value>-->
-                </property>
-            </activation>
+            <id>failsafe</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${version.surefire-plugin}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>**/*TestCase</include>
+                                    </includes>
+                                    <systemPropertyVariables>
+                                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                        <maven.home>${maven.home}</maven.home>
+                                        <db.user>${flyway.user}</db.user>
+                                        <db.password>${flyway.password}</db.password>
+                                        <db.url>${flyway.url}</db.url>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <version>2.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>startdb</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <source>db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
+                                            .withUsername("${flyway.user}")
+                                            .withDatabaseName("${flyway.user}")
+                                            .withPassword("${flyway.password}")
+                                    db.start()
+                                    project.properties.setProperty('flyway.url', db.getJdbcUrl())</source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.testcontainers</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${version.testcontainers}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <version>${version.flyway}</version>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>migrate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${version.pgsql-jdbc}</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <locations>
+                                <location>filesystem:${project.build.outputDirectory}/db/migration</location>
+                            </locations>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
