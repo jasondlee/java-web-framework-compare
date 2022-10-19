@@ -13,7 +13,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-public class ActorServiceTest {
+public class ActorServiceTestCase {
     @Inject
     protected ActorService actorService;
 

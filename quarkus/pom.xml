@@ -9,6 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>quarkus</artifactId>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -40,6 +41,10 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-agroal</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-flyway</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vladmihalcea</groupId>
@@ -93,12 +98,70 @@
                             <resources>
                                 <resource>
                                     <directory>${project.basedir}/../database</directory>
-                                    <targetPath>${project.build.outputDirectory}/db/migrations</targetPath>
+                                    <targetPath>${project.build.outputDirectory}/db/migration</targetPath>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.quarkus.platform</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${version.quarkus}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>quarkus-compile</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>generate-code</goal>
+                            <goal>generate-code-tests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${version.surefire-plugin}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*TestCase</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                <maven.home>${maven.home}</maven.home>
+                                <db.user>${flyway.user}</db.user>
+                                <db.password>${flyway.password}</db.password>
+                                <db.url>${flyway.url}</db.url>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.surefire-plugin}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*TestCase</exclude>
+                    </excludes>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+<!--                        <quarkus.log.level>DEBUG</quarkus.log.level>-->
+                        <maven.home>${maven.home}</maven.home>
+                        <db.user>${flyway.user}</db.user>
+                        <db.password>${flyway.password}</db.password>
+                        <db.url>${flyway.url}</db.url>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
@@ -107,7 +170,7 @@
                 <executions>
                     <execution>
                         <id>startdb</id>
-                        <phase>process-classes</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>execute</goal>
                         </goals>
@@ -135,7 +198,7 @@
                 <version>${version.flyway}</version>
                 <executions>
                     <execution>
-                        <phase>process-classes</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>migrate</goal>
                         </goals>
@@ -150,75 +213,26 @@
                 </dependencies>
                 <configuration>
                     <locations>
-                        <location>filesystem:${project.build.outputDirectory}/db/migrations</location>
+                        <location>filesystem:${project.build.outputDirectory}/db/migration</location>
                     </locations>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>io.quarkus.platform</groupId>
-                <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${version.quarkus}</version>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>quarkus-compile</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>generate-code</goal>
-                            <goal>generate-code-tests</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>dev-mode</id>
-                        <goals>
-                            <goal>dev</goal>
-                        </goals>
-                        <configuration>
-                            <systemProperties>
-                                <quarkus.datasource.username>${flyway.user}</quarkus.datasource.username>
-                                <quarkus.datasource.password>${flyway.password}</quarkus.datasource.password>
-                                <quarkus.datasource.jdbc.url>${flyway.url}</quarkus.datasource.jdbc.url>
-                            </systemProperties>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${version.surefire-plugin}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <maven.home>${maven.home}</maven.home>
-                                <db.user>${flyway.user}</db.user>
-                                <db.password>${flyway.password}</db.password>
-                                <db.url>${flyway.url}</db.url>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${version.surefire-plugin}</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-<!--                        <quarkus.log.level>DEBUG</quarkus.log.level>-->
-                        <maven.home>${maven.home}</maven.home>
-                        <db.user>${flyway.user}</db.user>
-                        <db.password>${flyway.password}</db.password>
-                        <db.url>${flyway.url}</db.url>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>flyway</id>
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+<!--                    <value>false</value>-->
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
