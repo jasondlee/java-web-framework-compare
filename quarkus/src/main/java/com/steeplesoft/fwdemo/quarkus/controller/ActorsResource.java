@@ -30,7 +30,7 @@ import com.steeplesoft.fwdemo.quarkus.service.ActorService;
 public class ActorsResource {
 
     @Inject
-    private ActorService actorService;
+    protected ActorService actorService;
 
     @GET
     public List<Actor> getActors() {

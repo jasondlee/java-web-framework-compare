@@ -30,7 +30,7 @@ import com.steeplesoft.fwdemo.quarkus.service.CategoriesService;
 public class CategoriesResource {
 
     @Inject
-    private CategoriesService categorieservice;
+    protected CategoriesService categorieservice;
 
     @GET
     public List<Category> getcategories() {

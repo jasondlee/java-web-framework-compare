@@ -11,9 +11,8 @@ public abstract class BaseModel {
 
     @Version
     @Column(name = "last_update")
-    public LocalDateTime lastUpdate;
+    public LocalDateTime lastUpdate = LocalDateTime.now();
 
-    @PrePersist
     @PreUpdate
     void updateTimestamp() {
         lastUpdate = LocalDateTime.now();

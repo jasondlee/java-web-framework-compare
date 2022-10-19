@@ -30,7 +30,7 @@ import com.steeplesoft.fwdemo.quarkus.service.StoreService;
 public class StoresResource {
 
     @Inject
-    private StoreService storeService;
+    protected StoreService storeService;
 
     @GET
     public List<Store> getStores() {

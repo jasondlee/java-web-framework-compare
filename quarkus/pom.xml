@@ -52,6 +52,17 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.23.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -96,7 +107,7 @@
                 <executions>
                     <execution>
                         <id>startdb</id>
-                        <phase>test</phase>
+                        <phase>process-classes</phase>
                         <goals>
                             <goal>execute</goal>
                         </goals>
@@ -124,7 +135,7 @@
                 <version>${version.flyway}</version>
                 <executions>
                     <execution>
-                        <phase>test</phase>
+                        <phase>process-classes</phase>
                         <goals>
                             <goal>migrate</goal>
                         </goals>
@@ -186,6 +197,9 @@
                                 <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <maven.home>${maven.home}</maven.home>
+                                <db.user>${flyway.user}</db.user>
+                                <db.password>${flyway.password}</db.password>
+                                <db.url>${flyway.url}</db.url>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -197,8 +211,11 @@
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                        <quarkus.log.level>DEBUG</quarkus.log.level>
+<!--                        <quarkus.log.level>DEBUG</quarkus.log.level>-->
                         <maven.home>${maven.home}</maven.home>
+                        <db.user>${flyway.user}</db.user>
+                        <db.password>${flyway.password}</db.password>
+                        <db.url>${flyway.url}</db.url>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
