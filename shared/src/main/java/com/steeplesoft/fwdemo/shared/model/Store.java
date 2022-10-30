@@ -1,4 +1,4 @@
-package com.steeplesoft.fwdemo.quarkus.model;
+package com.steeplesoft.fwdemo.shared.model;
 
 import java.util.List;
 import java.util.Objects;

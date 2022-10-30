@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
-import com.steeplesoft.fwdemo.quarkus.model.Category;
+import com.steeplesoft.fwdemo.shared.model.Category;
 import com.steeplesoft.fwdemo.quarkus.repository.CategoryRepository;
 import io.quarkus.panache.common.Sort;
 

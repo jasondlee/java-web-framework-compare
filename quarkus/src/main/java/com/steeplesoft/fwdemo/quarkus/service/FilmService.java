@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
-import com.steeplesoft.fwdemo.quarkus.model.Film;
+import com.steeplesoft.fwdemo.shared.model.Film;
 import com.steeplesoft.fwdemo.quarkus.repository.FilmRepository;
 import io.quarkus.panache.common.Sort;
 

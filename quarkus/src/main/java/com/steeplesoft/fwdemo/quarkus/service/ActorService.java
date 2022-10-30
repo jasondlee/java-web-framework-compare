@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
-import com.steeplesoft.fwdemo.quarkus.model.Actor;
+import com.steeplesoft.fwdemo.shared.model.Actor;
 import com.steeplesoft.fwdemo.quarkus.repository.ActorRepository;
 
 @ApplicationScoped

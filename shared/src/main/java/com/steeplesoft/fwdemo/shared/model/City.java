@@ -1,4 +1,4 @@
-package com.steeplesoft.fwdemo.quarkus.model;
+package com.steeplesoft.fwdemo.shared.model;
 
 import java.util.Objects;
 
@@ -7,21 +7,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
-public class Category extends BaseModel{
+@Table(name = "city")
+public class City extends BaseModel {
     @Id
-    @SequenceGenerator(name = "category_seq", sequenceName = "category_category_id_seq", allocationSize=1)
-    @GeneratedValue(generator = "category_seq")
-    @Column(name = "category_id")
+    @SequenceGenerator(name = "city_seq", sequenceName = "city_city_id_seq", allocationSize=1)
+    @GeneratedValue(generator = "city_seq")
+    @Column(name = "city_id")
     private Long id;
+    @Column(name = "city")
     private String name;
 
     public Long getId() {
         return id;
     }
 
-    public Category setId(Long id) {
+    public City setId(Long id) {
         this.id = id;
         return this;
     }
@@ -30,7 +33,7 @@ public class Category extends BaseModel{
         return name;
     }
 
-    public Category setName(String name) {
+    public City setName(String name) {
         this.name = name;
         return this;
     }
@@ -39,8 +42,8 @@ public class Category extends BaseModel{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return Objects.equals(id, category.id) && name.equals(category.name);
+        City city = (City) o;
+        return Objects.equals(id, city.id) && name.equals(city.name);
     }
 
     @Override
@@ -50,9 +53,10 @@ public class Category extends BaseModel{
 
     @Override
     public String toString() {
-        return "Category{" +
+        return "City{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", lastUpdate=" + lastUpdate +
                 '}';
     }
 }

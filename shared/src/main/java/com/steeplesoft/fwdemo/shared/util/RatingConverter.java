@@ -1,9 +1,9 @@
-package com.steeplesoft.fwdemo.quarkus.util;
+package com.steeplesoft.fwdemo.shared.util;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import com.steeplesoft.fwdemo.quarkus.model.Rating;
+import com.steeplesoft.fwdemo.shared.model.Rating;
 
 @Converter
 public class RatingConverter implements AttributeConverter<Rating, String> {

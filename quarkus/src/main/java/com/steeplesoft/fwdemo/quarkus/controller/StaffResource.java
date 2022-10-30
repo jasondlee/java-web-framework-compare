@@ -20,7 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.steeplesoft.fwdemo.quarkus.model.Staff;
+import com.steeplesoft.fwdemo.shared.model.Staff;
 import com.steeplesoft.fwdemo.quarkus.service.StaffService;
 
 @Path("/staff")

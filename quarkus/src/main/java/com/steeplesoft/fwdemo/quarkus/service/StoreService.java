@@ -8,9 +8,8 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
 
-import com.steeplesoft.fwdemo.quarkus.model.Store;
+import com.steeplesoft.fwdemo.shared.model.Store;
 import com.steeplesoft.fwdemo.quarkus.repository.StoreRepository;
-import io.quarkus.panache.common.Sort;
 
 @ApplicationScoped
 public class StoreService {

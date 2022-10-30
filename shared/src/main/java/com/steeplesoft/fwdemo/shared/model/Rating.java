@@ -1,4 +1,4 @@
-package com.steeplesoft.fwdemo.quarkus.model;
+package com.steeplesoft.fwdemo.shared.model;
 
 public enum Rating {
     G("G"),

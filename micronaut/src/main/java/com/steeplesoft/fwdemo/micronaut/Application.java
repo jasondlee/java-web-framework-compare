@@ -1,4 +1,4 @@
-package com.steeplesoft.fwdemo;
+package com.steeplesoft.fwdemo.micronaut;
 
 import io.micronaut.runtime.Micronaut;
 
